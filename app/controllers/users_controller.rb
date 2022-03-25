@@ -22,6 +22,40 @@ class UsersController < ApplicationController
         end
     end
 
+    def show
+        user_id = params[:id]
+        if user_id
+            user = User.find_by(id: user_id)
+            if user
+                favorite_quotes = user.favorites.map {|favorite| Quote.find_by(id: favorite.quote_id)}
+                render :json => {
+                    error: {
+                        hasError: false
+                    },
+                    userInfo: {
+                        userId: user.id,
+                        username: username,
+                        favorites: favorite_quotes
+                    }
+                }
+            else 
+                render :json => {
+                    error: {
+                        hasError: true,
+                        message: "No user found with the given id."
+                    }
+                }
+            end
+        else 
+            render :json => {
+                error: {
+                    hasError: true,
+                    message: 'No user id was sent along with the users show route.'
+                }
+            }
+        end
+    end
+
 
     private
         def user_params
