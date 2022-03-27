@@ -43,7 +43,7 @@ class QuotesController < ApplicationController
     private 
         def persist_hash_quotes(hash_quotes)
             json_quotes.each do |hash_quote|
-                hash_author = hash_quote["author"]
+                hash_author = hash_quote[:author]
                 if !hash_author
                     hash_author = ""
                 end

@@ -3,4 +3,12 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
+
+  root "sessions#launch"
+
+  post "upload-quotes/:id", to: "quotes#upload_quotes"
+
+  post "admins/login", to: "sessions#admin_login"
+  post "admins", to: "admins#create"
+
 end
