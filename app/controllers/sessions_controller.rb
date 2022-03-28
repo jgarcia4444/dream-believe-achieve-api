@@ -61,4 +61,85 @@ class SessionsController < ApplicationController
         end
     end
 
+    def admin_login
+        admin_info = params[:admin_info]
+        if admin_info
+            username = ""
+            if admin_info[:username]
+                username = admin_info[:username]
+                if username == ""
+                    render :json => {
+                        error: {
+                            hasError: true,
+                            message: "Username can not be empty"
+                        }
+                    }
+                end
+            else
+                render :json => {
+                    error: {
+                        hasError: true,
+                        message: "A username must be passed to login the admin."
+                    }
+                }
+            end
+
+            admin_user = Admin.find_by(username: username)
+            if admin_user
+                possible_password = ""
+                if admin_info[:password]
+                    possible_password = admin_info[:password]
+                    if possible_password == ""
+                        render :json => {
+                            error: {
+                                hasError: true,
+                                message: "Password can not be left empty to login."
+                            }
+                        }
+                    end
+                else
+                    render :json => {
+                        error: {
+                            hasError: true,
+                            message: "A password must be passed to login the user."
+                        }
+                    }
+                end
+
+                if admin_user.authenticate(possible_password)
+                    render :json => {
+                        error: {
+                            hasError: false
+                        },
+                        adminInfo: {
+                            userId: admin_user.id,
+                            username: admin_user.username
+                        }
+                    }
+                else
+                    render :json {
+                        error: {
+                            hasError: true,
+                            message: "Incorrect password."
+                        }
+                    }
+                end
+            else
+                render :json => {
+                    error: {
+                        hasError: true,
+                        message: "No admin user was found with the username given."
+                    }
+                }
+            end
+        else
+            render :json => {
+                error: {
+                    hasError: true,
+                    message: "Information must be sent with admin_info."
+                }
+            }
+        end
+    end
+
 end
