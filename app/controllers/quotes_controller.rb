@@ -5,7 +5,7 @@ class QuotesController < ApplicationController
         if id 
             quotes = params[:quotes]
             if quotes
-                if User.find_by(id: id)
+                if Admin.find_by(id: id)
                     persist_hash_quotes(quotes)
                     all_quotes = Quote.all
                     render :json => {

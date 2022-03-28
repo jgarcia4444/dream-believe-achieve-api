@@ -1,5 +1,5 @@
 
-class AdminController < ApplicationController
+class AdminsController < ApplicationController
     def create
         creating_admin = params[:creating_admin]
         if creating_admin
