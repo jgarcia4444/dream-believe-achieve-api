@@ -62,6 +62,8 @@ class SessionsController < ApplicationController
     end
 
     def admin_login
+        puts "admin_login action hit!! Params to follow:"
+        puts params;
         admin_info = params[:admin_info]
         if admin_info
             username = ""
