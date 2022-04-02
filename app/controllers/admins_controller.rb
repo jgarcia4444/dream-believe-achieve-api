@@ -4,11 +4,13 @@ class AdminsController < ApplicationController
         if params[:admin_create]
             admin_create = params[:admin_create]
             creating_admin_info = admin_create[:creating_admin]
+            route_admin_id = params[:admin_id]
             if creating_admin_info
                 creating_admin_username = ""
                 if creating_admin_info[:username]
                     creating_admin_username = creating_admin_info[:username]
                 end
+                creating_admin_equals_route_admin(route_admin_id, creating_admin_username)
                 creating_admin = Admin.find_by(username: creating_admin_username)
                 if creating_admin
                     creating_admin_password = ""
@@ -86,5 +88,39 @@ class AdminsController < ApplicationController
             }
         end
     end
+
+    private 
+        def creating_admin_equals_route_admin(route_id, creating_username)
+            route_admin = Admin.find_by(id: route_id)
+            if route_admin
+                creating_admin = Admin.find_by(username: creating_username)
+                if creating_admin
+                    if route_admin.username === creating_admin.username
+                        true
+                    else
+                        render :json => {
+                            error: {
+                                hasError: true,
+                                message: "The signed in admin and creating admin must be the same."
+                            }
+                        }
+                    end
+                else
+                    render :json => {
+                        error: {
+                            hasError: true,
+                            message: "No admin was found with the passed username."
+                        }
+                    }
+                end
+            else
+                render :json => {
+                    error: {
+                        hasError: true,
+                        message: "Route id is not a valid admin id."
+                    }
+                }
+            end
+        end
 
 end

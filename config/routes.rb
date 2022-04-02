@@ -9,6 +9,6 @@ Rails.application.routes.draw do
   post "upload-quotes/:id", to: "quotes#upload_quotes"
 
   post "admins/login", to: "sessions#admin_login"
-  post "admins", to: "admins#create"
+  post "admins/:admin_id/create", to: "admins#create"
 
 end
