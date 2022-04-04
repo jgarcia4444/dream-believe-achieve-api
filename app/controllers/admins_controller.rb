@@ -47,8 +47,9 @@ class AdminsController < ApplicationController
                                     error: {
                                         hasError: false
                                     },
-                                    new_admin: {
-                                        username: new_admin.username
+                                    newAdminInfo: {
+                                        username: new_admin.username,
+                                        password: new_admin.password
                                     }
                                 }
                             else
