@@ -20,13 +20,26 @@ class AdminsController < ApplicationController
                     if creating_admin.authenticate(creating_admin_password)
                         new_admin_info = admin_create[:new_admin]
                         if new_admin_info
-                            new_admin_username = ""
-                            if new_admin_info[:username]
-                                new_admin_username = new_admin_info[:username]
+                            new_admin_username = new_admin_info[:username]
+                            if new_admin_username == ""
+                                render :json => {
+                                    error: {
+                                        hasError: true,
+                                        message: "Username can not be left blank."
+                                    }
+                                }
+                                return
                             end
-                            new_admin_password = ""
-                            if new_admin_info[:password]
-                                new_admin_info = new_admin_info[:password]
+
+                            new_admin_password = new_admin_info[:password]
+                            if new_admin_password == ""
+                                render :json => {
+                                    error: {
+                                        hasError: true,
+                                        message: "Password can not be left blank."
+                                    }
+                                }
+                                return
                             end
                             new_admin = Admin.create(username: new_admin_username, password: new_admin_password)
                             if new_admin.valid?
