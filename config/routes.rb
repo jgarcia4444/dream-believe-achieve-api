@@ -11,4 +11,6 @@ Rails.application.routes.draw do
   post "admins/login", to: "sessions#admin_login"
   post "admins/:admin_id/create", to: "admins#create"
 
+  get 'quotes', to: "quotes#index"
+
 end

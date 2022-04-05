@@ -1,5 +1,18 @@
 class QuotesController < ApplicationController
 
+    def index
+        quotes = []
+        if Quote.all.count > 0
+            quotes = Quote.all
+        end
+        render :json => {
+            error: {
+                hasError: false
+            },
+            quotes: quotes
+        }
+    end
+
     def upload_quotes
         id = params[:id]
         if id 
