@@ -13,4 +13,6 @@ Rails.application.routes.draw do
 
   get 'quotes', to: "quotes#index"
 
+  delete 'quotes/:username', to: "quotes#destroy"
+
 end
