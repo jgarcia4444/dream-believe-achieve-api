@@ -3,7 +3,7 @@ class QuotesController < ApplicationController
     def destroy
         if params[:username]
             admin_username = params[:username]
-            admin = Admin.find_by(username: username)
+            admin = Admin.find_by(username: admin_username)
             if admin
                 if params[:quote_info]
                     quote_info = params[:quote_info]
