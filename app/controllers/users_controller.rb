@@ -9,6 +9,7 @@ class UsersController < ApplicationController
                 userInfo: {
                     userId: new_user.id,
                     username: new_user.username,
+                    email: new_user.email
                 }
             }
         else 

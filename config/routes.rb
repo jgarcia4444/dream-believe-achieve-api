@@ -15,4 +15,8 @@ Rails.application.routes.draw do
 
   delete 'quotes/:username', to: "quotes#destroy"
 
+  resources :users, only: [:create]
+
+  post 'users/login', to: "sessions#login"
+
 end
