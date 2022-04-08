@@ -19,4 +19,6 @@ Rails.application.routes.draw do
 
   post 'users/login', to: "sessions#login"
 
+  get 'quotes/of-the-day', to: "quotes#daily_quote"
+
 end

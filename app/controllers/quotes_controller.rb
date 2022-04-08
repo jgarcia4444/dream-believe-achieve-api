@@ -120,7 +120,97 @@ class QuotesController < ApplicationController
         end
     end
 
+    def daily_quote
+        user_info = params[:user_info]
+        if user_info 
+            if user_info[:username]
+                username = user_info[:username]
+                user = User.find_by(username: username)
+                if user
+                    if user_info[:quote_of_the_day_date]
+                        quote_of_the_day_date = user_info[:quote_of_the_day_date]
+                        if check_for_day_since_quote(quote_of_the_day_date)
+                            random_quote = get_random_quote
+                            if random_quote
+                                render :json => {
+                                    error: {
+                                        hasError: false
+                                    },
+                                    dailyQuote: {
+                                        quoteOfTheDay: random_quote
+                                    }
+                                }
+                            else
+                                render :json => {
+                                    error: {
+                                        hasError: true,
+                                        message: "There was an error getting a random quote."
+                                    }
+                                }
+                            end
+                        else
+                            render :json => {
+                                error: {
+                                    haError: true,
+                                    message: "Quote of the day can only be refreshed every 24 hours."
+                                }
+                            }
+                        end
+                    else
+                        render :json => {
+                            error: {
+                                hasError: true,
+                                message: "The date of the previous quote of the day date was not sent."
+                            }
+                        }
+                    end
+                else
+                    render :json => {
+                        error: {
+                            hasError: true,
+                            message: "No user was found with the given username."
+                        }
+                    }
+                end
+            else
+                render :json => {
+                    error: {
+                        hasError: true,
+                        message: "A username must be passed along to find the quote of the day."
+                    }
+                }
+            end
+        else 
+            render :json => {
+                error: {
+                    hasError: true,
+                    message: "User Information must be sent to get a daily quote."
+                }
+            }
+        end
+    end
+
     private 
+
+        def get_random_quote
+            random_quote_index = rand Quote.all.count
+            index_rounded = random_quote_index.floor
+            Quote.all[index_rounded]
+        end
+
+        def check_for_day_since_quote(quote_date_string)
+            quote_time = Time.parse(quote_date_string)
+            todays_time = Time.now
+            quote_date = quote_time.to_date
+            todays_date = todays_time.to_date
+            hour_difference = quote_time.hour - todays_time.hour
+            if (quote_date.cwday != todays_date && hour_difference == 0)
+                true 
+            else
+                false
+            end
+        end
+
         def persist_hash_quotes(hash_quotes)
             hash_quotes.each do |hash_quote|
                 hash_author = hash_quote[:author]
