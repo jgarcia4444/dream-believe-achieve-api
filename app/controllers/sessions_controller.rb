@@ -16,7 +16,8 @@ class SessionsController < ApplicationController
                                 },
                                 userInfo: {
                                     userId: authenticated_user.id,
-                                    username: authenticated_user.username
+                                    username: authenticated_user.username,
+                                    email: authenticated_user.email
                                 }
                             }
                         else
