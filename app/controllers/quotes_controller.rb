@@ -121,23 +121,32 @@ class QuotesController < ApplicationController
     end
 
     def daily_quote
-        random_quote = get_random_quote
-        if random_quote
-            render :json => {
-                error: {
-                    hasError: false
-                },
-                quoteInfo: {
-                    id: random_quote.id,
-                    author: random_quote.author,
-                    quote: random_quote.quote,
+        if params[:user_info]
+            random_quote = get_random_quote
+            if random_quote
+                render :json => {
+                    error: {
+                        hasError: false
+                    },
+                    quoteInfo: {
+                        id: random_quote.id,
+                        author: random_quote.author,
+                        quote: random_quote.quote,
+                    }
                 }
-            }
+            else
+                render :json => {
+                    error: {
+                        hasError: true,
+                        message: "There was an error getting a random quote."
+                    }
+                }
+            end
         else
             render :json => {
                 error: {
                     hasError: true,
-                    message: "There was an error getting a random quote."
+                    message: "User Information must be sent to get a daily quote."
                 }
             }
         end
@@ -202,18 +211,14 @@ class QuotesController < ApplicationController
         #         }
         #     end
         # else 
-        #     render :json => {
-        #         error: {
-        #             hasError: true,
-        #             message: "User Information must be sent to get a daily quote."
-        #         }
-        #     }
+        #     
         # end
     end
 
     private 
 
-        def get_random_quote
+        def get_random_quote(user_id)
+
             random_quote_index = rand Quote.all.count
             index_rounded = random_quote_index.floor
             Quote.all[index_rounded]
