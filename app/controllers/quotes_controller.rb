@@ -121,73 +121,94 @@ class QuotesController < ApplicationController
     end
 
     def daily_quote
-        user_info = params[:user_info]
-        if user_info 
-            if user_info[:username]
-                username = user_info[:username]
-                user = User.find_by(username: username)
-                if user
-                    if user_info[:quote_of_the_day_date]
-                        quote_of_the_day_date = user_info[:quote_of_the_day_date]
-                        if check_for_day_since_quote(quote_of_the_day_date)
-                            random_quote = get_random_quote
-                            if random_quote
-                                render :json => {
-                                    error: {
-                                        hasError: false
-                                    },
-                                    dailyQuote: {
-                                        quoteOfTheDay: random_quote
-                                    }
-                                }
-                            else
-                                render :json => {
-                                    error: {
-                                        hasError: true,
-                                        message: "There was an error getting a random quote."
-                                    }
-                                }
-                            end
-                        else
-                            render :json => {
-                                error: {
-                                    haError: true,
-                                    message: "Quote of the day can only be refreshed every 24 hours."
-                                }
-                            }
-                        end
-                    else
-                        render :json => {
-                            error: {
-                                hasError: true,
-                                message: "The date of the previous quote of the day date was not sent."
-                            }
-                        }
-                    end
-                else
-                    render :json => {
-                        error: {
-                            hasError: true,
-                            message: "No user was found with the given username."
-                        }
-                    }
-                end
-            else
-                render :json => {
-                    error: {
-                        hasError: true,
-                        message: "A username must be passed along to find the quote of the day."
-                    }
+        random_quote = get_random_quote
+        if random_quote
+            render :json => {
+                error: {
+                    hasError: false
+                },
+                quoteInfo: {
+                    id: random_quote.id,
+                    author: random_quote.author,
+                    quote: random_quote.quote,
                 }
-            end
-        else 
+            }
+        else
             render :json => {
                 error: {
                     hasError: true,
-                    message: "User Information must be sent to get a daily quote."
+                    message: "There was an error getting a random quote."
                 }
             }
         end
+
+        # user_info = params[:user_info]
+        # if user_info 
+        #     if user_info[:username]
+        #         username = user_info[:username]
+        #         user = User.find_by(username: username)
+        #         if user
+        #             if user_info[:quote_of_the_day_date]
+        #                 quote_of_the_day_date = user_info[:quote_of_the_day_date]
+        #                 if check_for_day_since_quote(quote_of_the_day_date)
+        #                     random_quote = get_random_quote
+        #                     if random_quote
+        #                         render :json => {
+        #                             error: {
+        #                                 hasError: false
+        #                             },
+        #                             dailyQuote: {
+        #                                 quoteOfTheDay: random_quote
+        #                             }
+        #                         }
+        #                     else
+        #                         render :json => {
+        #                             error: {
+        #                                 hasError: true,
+        #                                 message: "There was an error getting a random quote."
+        #                             }
+        #                         }
+        #                     end
+        #                 else
+        #                     render :json => {
+        #                         error: {
+        #                             haError: true,
+        #                             message: "Quote of the day can only be refreshed every 24 hours."
+        #                         }
+        #                     }
+        #                 end
+        #             else
+        #                 render :json => {
+        #                     error: {
+        #                         hasError: true,
+        #                         message: "The date of the previous quote of the day date was not sent."
+        #                     }
+        #                 }
+        #             end
+        #         else
+        #             render :json => {
+        #                 error: {
+        #                     hasError: true,
+        #                     message: "No user was found with the given username."
+        #                 }
+        #             }
+        #         end
+        #     else
+        #         render :json => {
+        #             error: {
+        #                 hasError: true,
+        #                 message: "A username must be passed along to find the quote of the day."
+        #             }
+        #         }
+        #     end
+        # else 
+        #     render :json => {
+        #         error: {
+        #             hasError: true,
+        #             message: "User Information must be sent to get a daily quote."
+        #         }
+        #     }
+        # end
     end
 
     private 
