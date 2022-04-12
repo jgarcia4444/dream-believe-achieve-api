@@ -122,23 +122,84 @@ class QuotesController < ApplicationController
 
     def daily_quote
         if params[:user_info]
-            random_quote = get_random_quote
-            if random_quote
-                render :json => {
-                    error: {
-                        hasError: false
-                    },
-                    quoteInfo: {
-                        id: random_quote.id,
-                        author: random_quote.author,
-                        quote: random_quote.quote,
+            user_info = params[:user_info]
+            if user_info[:username]
+                username = user_info[:username]
+                fetching_user = User.find_by(username: username)
+                if fetching_user
+                    random_quote = nil
+                    if fetching_user.daily_quote_date
+                        if !check_for_day_since_quote(fetching_user.daily_quote_date)
+                            render :json => {
+                                error: {
+                                    hasError: true,
+                                    message: "24 hours have not passed since your last daily quote."
+                                }
+                            }
+                        else
+                            daily_quote_ids = fetching_user.daily_quotes.map {|daily_quote| daily_quote.quote_id}
+                            if daily_quote_ids
+                                filtered_quotes = Quote.filter_quotes(daily_quote_ids)
+                                if filtered_quotes
+                                    random_quote = get_random_quote(filtered_quotes)
+                                else
+                                    render :json => {
+                                        error: {
+                                            hasError: true,
+                                            message: "There was an error filtering the random quotes so that no duplicates are returned."
+                                        }
+                                    }
+                                end
+                            else
+                                render :json => {
+                                    error: {
+                                        hasError: true,
+                                        message: "There was an error on the backend retrieving information."
+                                    }
+                                }
+                            end
+                        end
+                    else
+                        random_quote = get_random_quote
+                    end
+                    if random_quote
+                        todays_time = Time.now
+                        fetching_user.update(daily_quote_date: todays_time)
+                        fetching_user.add_quote_to_daily_quotes(random_quote)
+                        render :json => {
+                            error: {
+                                hasError: false
+                            },
+                            dailyQuote: {
+                                quoteOfTheDayDate: todays_time
+                                quoteInfo: {
+                                    id: random_quote.id,
+                                    author: random_quote.author,
+                                    quote: random_quote.quote,
+                                }
+                            },
+                        }
+                    else
+                        render :json => {
+                            error: {
+                                hasError: true,
+                                message: "There was an error getting a random quote."
+                            }
+                        }
+                    end
+                else
+                    render :json => {
+                        error: {
+                            hasError: true,
+                            message: "Unable to fetch quote. Invalid information sent."
+                        }
                     }
-                }
+                end
             else
                 render :json => {
                     error: {
                         hasError: true,
-                        message: "There was an error getting a random quote."
+                        message: "Unable to fetch quote. Invalid information sent."
                     }
                 }
             end
@@ -146,90 +207,25 @@ class QuotesController < ApplicationController
             render :json => {
                 error: {
                     hasError: true,
-                    message: "User Information must be sent to get a daily quote."
+                    message: "Unable to fetch quote. No information sent."
                 }
             }
         end
-
-        # user_info = params[:user_info]
-        # if user_info 
-        #     if user_info[:username]
-        #         username = user_info[:username]
-        #         user = User.find_by(username: username)
-        #         if user
-        #             if user_info[:quote_of_the_day_date]
-        #                 quote_of_the_day_date = user_info[:quote_of_the_day_date]
-        #                 if check_for_day_since_quote(quote_of_the_day_date)
-        #                     random_quote = get_random_quote
-        #                     if random_quote
-        #                         render :json => {
-        #                             error: {
-        #                                 hasError: false
-        #                             },
-        #                             dailyQuote: {
-        #                                 quoteOfTheDay: random_quote
-        #                             }
-        #                         }
-        #                     else
-        #                         render :json => {
-        #                             error: {
-        #                                 hasError: true,
-        #                                 message: "There was an error getting a random quote."
-        #                             }
-        #                         }
-        #                     end
-        #                 else
-        #                     render :json => {
-        #                         error: {
-        #                             haError: true,
-        #                             message: "Quote of the day can only be refreshed every 24 hours."
-        #                         }
-        #                     }
-        #                 end
-        #             else
-        #                 render :json => {
-        #                     error: {
-        #                         hasError: true,
-        #                         message: "The date of the previous quote of the day date was not sent."
-        #                     }
-        #                 }
-        #             end
-        #         else
-        #             render :json => {
-        #                 error: {
-        #                     hasError: true,
-        #                     message: "No user was found with the given username."
-        #                 }
-        #             }
-        #         end
-        #     else
-        #         render :json => {
-        #             error: {
-        #                 hasError: true,
-        #                 message: "A username must be passed along to find the quote of the day."
-        #             }
-        #         }
-        #     end
-        # else 
-        #     
-        # end
     end
 
     private 
 
-        def get_random_quote(user_id)
-
-            random_quote_index = rand Quote.all.count
+        def get_random_quote(quotes=Quote.all)
+            random_quote_index = rand quotes.count
             index_rounded = random_quote_index.floor
-            Quote.all[index_rounded]
+            quotes[index_rounded]
         end
 
-        def check_for_day_since_quote(quote_date_string)
-            quote_time = Time.parse(quote_date_string)
+        def check_for_day_since_quote(quote_time_string)
             todays_time = Time.now
-            quote_date = quote_time.to_date
+            quote_date = quote_time_string.to_date
             todays_date = todays_time.to_date
-            hour_difference = quote_time.hour - todays_time.hour
+            hour_difference = quote_time_string.hour - todays_time.hour
             if (quote_date.cwday != todays_date && hour_difference == 0)
                 true 
             else
