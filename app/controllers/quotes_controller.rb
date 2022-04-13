@@ -171,7 +171,7 @@ class QuotesController < ApplicationController
                                 hasError: false
                             },
                             dailyQuote: {
-                                quoteOfTheDayDate: todays_time
+                                quoteOfTheDayDate: todays_time,
                                 quoteInfo: {
                                     id: random_quote.id,
                                     author: random_quote.author,
