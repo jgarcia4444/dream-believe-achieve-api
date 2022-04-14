@@ -22,6 +22,26 @@ class User < ApplicationRecord
             }
         end
     end
+
+    def favorite_quotes 
+        self.favorites.map do |favorite|
+            quote = Quote.find_by(id: favorite.quote_id)
+            if quote
+                {
+                    id: quote.id,
+                    author: quote.author,
+                    quote: quote.quote
+                }
+            else
+                render :json => {
+                    error: {
+                        hasError: true,
+                        message: "There was an error finding a favorite quote."
+                    }
+                }
+            end
+        end
+    end
     
 
 end

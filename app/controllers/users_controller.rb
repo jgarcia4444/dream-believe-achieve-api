@@ -57,6 +57,36 @@ class UsersController < ApplicationController
         end
     end
 
+    def favorites
+        if params[:username]
+            username = params[:username]
+            user = User.find_by(username: username)
+            if user
+                user_favorite_quotes = user.favorite_quotes
+                render :json => {
+                    error: {
+                        hasError: false,
+                    },
+                    favoriteQuotes: user_favorite_quotes
+                }
+            else
+                render :json => {
+                    error: {
+                        hasError: true,
+                        message: "Unable to find a user with passed credentials."
+                    }
+                }
+            end
+        else
+            render :json => {
+                error: {
+                    hasError: true,
+                    message: "Server Error."
+                }
+            }
+        end
+    end
+
     
 
     private
