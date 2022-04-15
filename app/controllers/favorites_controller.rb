@@ -75,4 +75,72 @@ class FavoritesController < ApplicationController
         end
     end
 
+    def remove
+        if params[:username]
+            username = params[:username]
+            user = User.find_by(username: username)
+            if user
+                if params[:favorite_quote_info]
+                    favorite_quote_info = params[:favorite_quote_info]
+                    if favorite_quote_info[:id]
+                        quote_id = favorite_quote_info[:id]
+                        favorite_to_remove = Favorite.find_by(quote_id: quote_id, user_id: user_id)
+                        if favorite_to_remove
+                            if favorite_to_remove.destroy
+                                render :json => {
+                                    error: {
+                                        hasError: false,
+                                    }   
+                                }
+                            else
+                                render :json => {
+                                    error: {
+                                        hasError: true,
+                                        message: "An error occured saving this action.",
+                                        errors: new_favorite.errors
+                                    }
+                                }
+                            end
+                        else
+                            render :json => {
+                                error: {
+                                    hasError: true,
+                                    message: "A favorite was not found with the information given",
+                                }
+                            }
+                        end
+                    else
+                        render :json => {
+                            error: {
+                                hasError: true,
+                                message: "No specific quote info received"
+                            }
+                        }
+                    end
+                else
+                    render :json => {
+                        error: {
+                            hasError: true,
+                            message: "No quote info received"
+                        }
+                    }
+                end
+            else 
+                render :json => {
+                    error: {
+                        hasError: true,
+                        message: "No user found with the given credentials"
+                    }
+                }
+            end
+        else
+            render :json => {
+                error: {
+                    hasError: true,
+                    message: "No user credentials were passed with the request."
+                }
+            }
+        end
+    end
+
 end
