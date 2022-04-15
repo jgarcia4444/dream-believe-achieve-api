@@ -22,5 +22,6 @@ Rails.application.routes.draw do
   post 'quotes/get-daily-quote', to: "quotes#daily_quote"
 
   get "users/:username/favorites", to: "users#favorites"
+  post "users/:username/favorites/add", "favorites#add"
 
 end
