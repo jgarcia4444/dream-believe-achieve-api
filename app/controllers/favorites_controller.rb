@@ -84,7 +84,7 @@ class FavoritesController < ApplicationController
                     favorite_quote_info = params[:favorite_quote_info]
                     if favorite_quote_info[:id]
                         quote_id = favorite_quote_info[:id]
-                        favorite_to_remove = Favorite.find_by(quote_id: quote_id, user_id: user_id)
+                        favorite_to_remove = Favorite.find_by(quote_id: quote_id, user_id: user.id)
                         if favorite_to_remove
                             if favorite_to_remove.destroy
                                 render :json => {
