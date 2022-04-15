@@ -23,7 +23,7 @@ class User < ApplicationRecord
         end
     end
 
-    def favorite_quotes 
+    def favorite_quotes
         self.favorites.map do |favorite|
             quote = Quote.find_by(id: favorite.quote_id)
             if quote
