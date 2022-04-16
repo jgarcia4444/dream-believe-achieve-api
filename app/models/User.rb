@@ -26,11 +26,13 @@ class User < ApplicationRecord
     def favorite_quotes
         self.favorites.map do |favorite|
             quote = Quote.find_by(id: favorite.quote_id)
+            favorites_count = quote.favorites.count
             if quote
                 {
                     id: quote.id,
                     author: quote.author,
-                    quote: quote.quote
+                    quote: quote.quote,
+                    favorites: favorites_count
                 }
             else
                 render :json => {

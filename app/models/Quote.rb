@@ -1,4 +1,6 @@
 class Quote < ApplicationRecord 
+
+    has_many :favorites, dependent: :destroy
     
     def filter_quotes(daily_quote_ids)
         all_quotes = Quote.all
