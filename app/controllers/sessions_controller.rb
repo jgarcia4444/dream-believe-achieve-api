@@ -10,6 +10,10 @@ class SessionsController < ApplicationController
                     if password
                         authenticated_user = user_logging_in.authenticate(password)
                         if authenticated_user
+                            quote_date = ""
+                            if authenticated_user.daily_quote_date
+                                quote_date = authenticated_user.daily_quote_date
+                            end
                             render :json => {
                                 error: {
                                     hasError: false
@@ -18,6 +22,9 @@ class SessionsController < ApplicationController
                                     userId: authenticated_user.id,
                                     username: authenticated_user.username,
                                     email: authenticated_user.email
+                                },
+                                dailyQuote: {
+                                    quoteOfTheDayDate: quote_date
                                 }
                             }
                         else
