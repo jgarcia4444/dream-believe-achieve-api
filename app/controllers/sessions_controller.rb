@@ -11,9 +11,19 @@ class SessionsController < ApplicationController
                         authenticated_user = user_logging_in.authenticate(password)
                         if authenticated_user
                             quote_date = ""
+                            daily_quote = {
+                                id: "",
+                                author: "",
+                                quote: ""
+                            }
                             if authenticated_user.daily_quote_date
                                 quote_date = authenticated_user.daily_quote_date
+                                quote = Quote.find_by(id: authenticated_user.daily_quotes.last.quote_id)
+                                daily_quote[:id] = quote.id
+                                daily_quote[:author] = quote.author
+                                daily_quote[:quote] = quote.quote
                             end
+                            
                             render :json => {
                                 error: {
                                     hasError: false
@@ -24,7 +34,8 @@ class SessionsController < ApplicationController
                                     email: authenticated_user.email
                                 },
                                 dailyQuote: {
-                                    quoteOfTheDayDate: quote_date
+                                    quoteOfTheDayDate: quote_date,
+                                    quoteInfo: daily_quote
                                 }
                             }
                         else
