@@ -165,10 +165,6 @@ class QuotesController < ApplicationController
                     if random_quote
                         todays_time = Time.now
                         fetching_user.update(daily_quote_date: todays_time)
-                        puts fetching_user.daily_quote_date
-                        puts "##########"
-                        puts "Is the fetching user valid? #{fetching_user.valid?}"
-                        puts "#{fetching_user.errors.full_messages}"
                         fetching_user.add_quote_to_daily_quotes(random_quote)
                         render :json => {
                             error: {
