@@ -2,7 +2,7 @@ class SessionsController < ApplicationController
     def login
         login_info = params[:login_info]
         if login_info
-            email = login_info[:email]
+            email = login_info[:email].downcase
             if email
                 user_logging_in = User.find_by(email: email)
                 if user_logging_in
