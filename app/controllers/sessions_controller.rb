@@ -23,6 +23,8 @@ class SessionsController < ApplicationController
                                 daily_quote[:author] = quote.author
                                 daily_quote[:quote] = quote.quote
                             end
+
+                            top_ten_favorites = Favorite.find_top_ten
                             
                             render :json => {
                                 error: {
@@ -36,7 +38,9 @@ class SessionsController < ApplicationController
                                 dailyQuote: {
                                     quoteOfTheDayDate: quote_date,
                                     quoteInfo: daily_quote
-                                }
+                                },
+                                favoriteQuotes: user.favorite_quotes,
+                                topTenQuotes: top_ten_favorites
                             }
                         else
                             render :json => {
