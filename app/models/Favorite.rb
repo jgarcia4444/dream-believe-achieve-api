@@ -17,7 +17,7 @@ class Favorite < ApplicationRecord
 
         sorted_quote_ids = sorting_object.keys.sort {|a, b| sorting_object[:b] <=> sorting_object[:a]}
         sorted_quotes = sorted_quote_ids.map {|quote_id| Quote.find_by(id: quote_id)}
-        if sorted_quote.count > 10
+        if sorted_quotes.count > 10
             sorted_quotes.slice(0, 10).map do |quote|
                 favorites_count = quote.favorites.count
                 {

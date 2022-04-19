@@ -39,7 +39,7 @@ class SessionsController < ApplicationController
                                     quoteOfTheDayDate: quote_date,
                                     quoteInfo: daily_quote
                                 },
-                                favoriteQuotes: user.favorite_quotes,
+                                favoriteQuotes: authenticated_user.favorite_quotes,
                                 topTenQuotes: top_ten_favorites
                             }
                         else
