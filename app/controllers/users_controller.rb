@@ -2,6 +2,7 @@ class UsersController < ApplicationController
     def create
         new_user = User.create(user_params)
         if new_user.valid?
+            top_ten_quotes = Favorite.find_top_ten
             render :json => {
                 error: {
                     hasError: false
@@ -10,7 +11,8 @@ class UsersController < ApplicationController
                     userId: new_user.id,
                     username: new_user.username,
                     email: new_user.email
-                }
+                },
+                topTenQuotes: top_ten_quotes,
             }
         else 
             render :json => {
@@ -63,11 +65,13 @@ class UsersController < ApplicationController
             user = User.find_by(username: username)
             if user
                 user_favorite_quotes = user.favorite_quotes
+                top_ten_quotes = Favorite.find_top_ten
                 render :json => {
                     error: {
                         hasError: false,
                     },
-                    favoriteQuotes: user_favorite_quotes
+                    favoriteQuotes: user_favorite_quotes,
+                    topTenQuotes: top_ten_quotes,
                 }
             else
                 render :json => {
