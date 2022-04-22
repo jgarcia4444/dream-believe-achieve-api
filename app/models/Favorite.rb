@@ -3,20 +3,17 @@ class Favorite < ApplicationRecord
     belongs_to :quote
 
     def self.find_top_ten
-        favorites = Favorite.all
-        sorting_object = {}
 
-        favorites.each do |favorite|
-            quote_id = favorite.quote_id
-            if sorting_object[quote_id]
-                sorting_object[quote_id] += 1
-            else
-                sorting_object[quote_id] = 1
+        quotes_with_favorites = []
+        Favorite.all.each do |favorite|
+            if !quotes_with_favorites.any? {|quote| quote.id === favorite.quote_id}
+                quote = Quote.find_by(id: favorite.quote_id)
+                quotes_with_favorites.append(quote)
             end
         end
 
-        sorted_quote_ids = sorting_object.keys.sort {|a, b| sorting_object[:b] <=> sorting_object[:a]}
-        sorted_quotes = sorted_quote_ids.map {|quote_id| Quote.find_by(id: quote_id)}
+        sorted_quotes = quotes_with_favorites.sort {|a, b| a.favorites.count <=> b.favorites.count}.reverse 
+
         if sorted_quotes.count > 10
             sorted_quotes.slice(0, 10).map do |quote|
                 favorites_count = quote.favorites.count
