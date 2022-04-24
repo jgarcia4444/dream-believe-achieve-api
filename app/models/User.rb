@@ -10,6 +10,7 @@ class User < ApplicationRecord
     validates :username, uniqueness: true
     validates :username, presence: true
     validates :password_digest, presence: true
+    validates :password_digest, length: {minimum: 8}
 
     def add_quote_to_daily_quotes(quote)
         new_daily_quote = DailyQuote.create(quote_id: quote.id, user_id: self.id)
