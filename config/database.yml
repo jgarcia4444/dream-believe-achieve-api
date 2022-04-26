@@ -84,3 +84,5 @@ production:
   database: dreamBelieveAchieveApiProduction
   username: DBARoot
   password: HolaTierra10152022!
+  host: dreambelieveachieveapiproduction.c7zsfombj3p9.us-west-1.rds.amazonaws.com,
+  port: 5432

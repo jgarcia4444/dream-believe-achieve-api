@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
     def create
+        puts "User create action triggered!!!!!!!!!!!"
         if params[:user]
             user_info = params[:user]
             if user_info[:email] || user_info[:email] != ""
