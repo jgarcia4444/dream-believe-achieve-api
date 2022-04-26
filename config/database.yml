@@ -81,6 +81,6 @@ test:
 #
 production:
   <<: *default
-  database: dream_believe_achieve_api_production
-  username: dream_believe_achieve_api
-  password: <%= ENV["DREAM_BELIEVE_ACHIEVE_API_DATABASE_PASSWORD"] %>
+  database: dreamBelieveAchieveApiProduction
+  username: DBARoot
+  password: HolaTierra10152022!
