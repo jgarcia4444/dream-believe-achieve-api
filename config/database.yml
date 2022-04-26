@@ -79,10 +79,11 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
+# DBARoot
 production:
   <<: *default
-  database: dreamBelieveAchieveApiProduction
-  username: DBARoot
+  database: dreambelieveachieveapiproduction
+  username: Instance
   password: HolaTierra10152022!
   host: dreambelieveachieveapiproduction.c7zsfombj3p9.us-west-1.rds.amazonaws.com,
   port: 5432
