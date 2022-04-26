@@ -1,4 +1,11 @@
 class SessionsController < ApplicationController
+
+    def launch 
+        render :json => {
+            message: "Welcome to DBA AWS Server."
+        }
+    end
+
     def login
         login_info = params[:login_info]
         if login_info
