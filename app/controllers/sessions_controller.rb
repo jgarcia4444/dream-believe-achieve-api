@@ -53,7 +53,8 @@ class SessionsController < ApplicationController
                             render :json => {
                                 error: {
                                     hasError: true,
-                                    message: 'Incorrect Password.'
+                                    message: '',
+                                    errors: [{"password": 'Incorrect Password.'}]
                                 }
                             }
                         end
@@ -69,7 +70,8 @@ class SessionsController < ApplicationController
                     render :json => {
                         error: {
                             hasError: true,
-                            message: "No user found with the given email."
+                            message: "",
+                            errors: [{"email": "No user found with the given email."}]
                         }
                     }
                 end
