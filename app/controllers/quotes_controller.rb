@@ -164,6 +164,8 @@ class QuotesController < ApplicationController
                     end
                     if random_quote
                         todays_time = Time.now
+                        puts "Todays time that should be updating the users property"
+                        puts todays_time
                         fetching_user.update(daily_quote_date: todays_time)
                         fetching_user.add_quote_to_daily_quotes(random_quote)
                         render :json => {
