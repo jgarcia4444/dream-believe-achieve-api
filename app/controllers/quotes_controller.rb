@@ -166,6 +166,7 @@ class QuotesController < ApplicationController
                         todays_time = Time.now
                         puts "Todays time that should be updating the users property"
                         puts todays_time
+                        puts fetching_user.valid?
                         fetching_user.update(daily_quote_date: todays_time)
                         puts fetching_user.daily_quote_date
                         puts fetching_user.valid?
