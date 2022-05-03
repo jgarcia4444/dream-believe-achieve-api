@@ -13,10 +13,12 @@ class FavoritesController < ApplicationController
                         if quote
                             new_favorite = Favorite.create(user_id: user.id, quote_id: quote_id)
                             if new_favorite
+                                favorites_count = quote.favorites.count
                                 quote_info = {
                                     id: quote_id,
                                     author: quote.author,
-                                    quote: quote.quote
+                                    quote: quote.quote,
+                                    favorites: favorites_count
                                 }
                                 render :json => {
                                     error: {
