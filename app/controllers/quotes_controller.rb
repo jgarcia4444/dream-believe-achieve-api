@@ -232,12 +232,10 @@ class QuotesController < ApplicationController
             puts "Check for day since quote triggered"
             puts quote_time_string
             todays_time = Time.now
-            quote_date = Time.parse(quote_time_string).to_date
-            puts quote_date
-            puts "after quote date parsing"
+            quote_time = Time.parse(quote_time_string)
+            quote_date = quote_time.to_date
             todays_date = todays_time.to_date
-            puts todays_date
-            hour_difference = quote_date.hour - todays_time.hour
+            hour_difference = quote_time.hour - todays_time.hour
             puts hour_difference
             if (quote_date.cwday != todays_date.cwday && hour_difference == 0)
                 puts "A day has passed"
