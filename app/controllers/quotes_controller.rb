@@ -126,12 +126,16 @@ class QuotesController < ApplicationController
         if params[:user_info]
             user_info = params[:user_info]
             if user_info[:username]
+                puts "username found #{user_info[:username]}"
                 username = user_info[:username]
                 fetching_user = User.find_by(username: username)
                 if fetching_user
+                    puts "User found!"
                     random_quote = nil
                     if fetching_user.daily_quote_date
+                        puts "Daily quote date found"
                         if !check_for_day_since_quote(fetching_user.daily_quote_date)
+                            puts "has not been a day since previous quote"
                             render :json => {
                                 error: {
                                     hasError: true,
@@ -139,6 +143,7 @@ class QuotesController < ApplicationController
                                 }
                             }
                         else
+                            puts "Has been a day since quote."
                             daily_quote_ids = fetching_user.daily_quotes.map {|daily_quote| daily_quote.quote_id}
                             if daily_quote_ids
                                 filtered_quotes = Quote.filter_quotes(daily_quote_ids)
