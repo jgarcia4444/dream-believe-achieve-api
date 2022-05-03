@@ -229,6 +229,8 @@ class QuotesController < ApplicationController
         end
 
         def check_for_day_since_quote(quote_time_string)
+            puts "Check for day since quote triggered"
+            puts quote_time_string
             todays_time = Time.now
             quote_date = quote_time_string.to_date
             todays_date = todays_time.to_date
