@@ -237,9 +237,11 @@ class QuotesController < ApplicationController
             todays_date = todays_time.to_date
             hour_difference = quote_time_string.hour - todays_time.hour
             if (quote_date.cwday != todays_date && hour_difference == 0)
-                true 
+                puts "A day has passed"
+                return true 
             else
-                false
+                puts "A day has not passed."
+                return false
             end
         end
 
