@@ -143,6 +143,7 @@ class QuotesController < ApplicationController
                             puts "daily quote id counts #{daily_quote_ids.count}"
                             if daily_quote_ids
                                 filtered_quotes = Quote.filter_quotes(daily_quote_ids)
+                                puts "filtered quotes count #{filtered_quotes.count}"
                                 if filtered_quotes
                                     random_quote = get_random_quote(filtered_quotes)
                                 else
