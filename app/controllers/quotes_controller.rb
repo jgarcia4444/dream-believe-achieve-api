@@ -130,7 +130,6 @@ class QuotesController < ApplicationController
                     random_quote = nil
                     if fetching_user.daily_quote_date
                         if !check_for_day_since_quote(fetching_user.daily_quote_date)
-                            puts "has not been a day since previous quote"
                             render :json => {
                                 error: {
                                     hasError: true,
@@ -138,12 +137,9 @@ class QuotesController < ApplicationController
                                 }
                             }
                         else
-                            puts "Has been a day since quote."
                             daily_quote_ids = fetching_user.daily_quotes.map {|daily_quote| daily_quote.quote_id}
-                            puts "daily quote id counts #{daily_quote_ids.count}"
                             if daily_quote_ids
                                 filtered_quotes = Quote.filter_quotes(daily_quote_ids)
-                                puts "filtered quotes count #{filtered_quotes.count}"
                                 if filtered_quotes
                                     random_quote = get_random_quote(filtered_quotes)
                                 else
@@ -226,19 +222,14 @@ class QuotesController < ApplicationController
         end
 
         def check_for_day_since_quote(quote_time_string)
-            puts "Check for day since quote triggered"
-            puts quote_time_string
             todays_time = Time.now
             quote_time = Time.parse(quote_time_string)
             quote_date = quote_time.to_date
             todays_date = todays_time.to_date
             hour_difference = quote_time.hour - todays_time.hour
-            puts hour_difference
             if (quote_date.cwday != todays_date.cwday && hour_difference <= 0)
-                puts "A day has passed"
                 true 
             else
-                puts "A day has not passed."
                 false
             end
         end
