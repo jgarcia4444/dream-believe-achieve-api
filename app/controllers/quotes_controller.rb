@@ -121,6 +121,7 @@ class QuotesController < ApplicationController
     end
 
     def daily_quote
+        puts "Daily quote action triggered!"
         if params[:user_info]
             user_info = params[:user_info]
             if user_info[:username]
