@@ -25,4 +25,6 @@ Rails.application.routes.draw do
   post "users/:username/favorites/add", to: "favorites#add"
   delete "users/:username/favorites/remove", to: "favorites#remove"
 
+  get "top_ten_quotes", to: "quotes#get_top_ten_quotes"
+
 end

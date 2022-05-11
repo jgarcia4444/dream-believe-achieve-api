@@ -207,6 +207,25 @@ class QuotesController < ApplicationController
         end
     end
 
+    def get_top_ten_quotes
+        top_ten_quotes = Favorite.find_top_ten
+        if top_ten_quotes.count > 0 
+            render :json => {
+                error: {
+                    hasError: false
+                },
+                topTenQuotes: top_ten_quotes
+            }
+        else
+            render :json => {
+                error: {
+                    hasError: false,
+                    message: "There was an error loading the top ten quotes."
+                }
+            }
+        end
+    end
+
     private 
 
         def get_random_quote(quotes=Quote.all)
