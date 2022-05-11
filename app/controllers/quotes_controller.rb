@@ -228,7 +228,9 @@ class QuotesController < ApplicationController
             puts "check for day since quote triggered"
             puts "#{quote_time_string}"
             todays_time = Time.now
+            puts "Todays Time #{todays_time}"
             quote_time = Time.parse(quote_time_string)
+            puts "Quote Time #{quote_time}"
             quote_date = quote_time.to_date
             todays_date = todays_time.to_date
             hour_difference = quote_time.hour - todays_time.hour
