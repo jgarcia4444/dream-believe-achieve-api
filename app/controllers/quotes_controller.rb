@@ -130,38 +130,38 @@ class QuotesController < ApplicationController
                 if fetching_user
                     random_quote = nil
                     if fetching_user.daily_quote_date
-                        puts "Before checking if has been a day"
-                        if !check_for_day_since_quote(fetching_user.daily_quote_date)
-                            render :json => {
-                                error: {
-                                    hasError: true,
-                                    message: "24 hours have not passed since your last daily quote."
-                                }
-                            }
-                        else
-                            puts "Before getting daily quote ids"
-                            daily_quote_ids = fetching_user.daily_quotes.map {|daily_quote| daily_quote.quote_id}
-                            if daily_quote_ids
-                                filtered_quotes = Quote.filter_quotes(daily_quote_ids)
-                                if filtered_quotes
-                                    random_quote = get_random_quote(filtered_quotes)
-                                else
-                                    render :json => {
-                                        error: {
-                                            hasError: true,
-                                            message: "There was an error filtering the random quotes so that no duplicates are returned."
-                                        }
-                                    }
-                                end
+                        # puts "Before checking if has been a day"
+                        # if !check_for_day_since_quote(fetching_user.daily_quote_date)
+                        #     render :json => {
+                        #         error: {
+                        #             hasError: true,
+                        #             message: "24 hours have not passed since your last daily quote."
+                        #         }
+                        #     }
+                        # else
+                        puts "Before getting daily quote ids"
+                        daily_quote_ids = fetching_user.daily_quotes.map {|daily_quote| daily_quote.quote_id}
+                        if daily_quote_ids
+                            filtered_quotes = Quote.filter_quotes(daily_quote_ids)
+                            if filtered_quotes
+                                random_quote = get_random_quote(filtered_quotes)
                             else
                                 render :json => {
                                     error: {
                                         hasError: true,
-                                        message: "There was an error on the backend retrieving information."
+                                        message: "There was an error filtering the random quotes so that no duplicates are returned."
                                     }
                                 }
                             end
+                        else
+                            render :json => {
+                                error: {
+                                    hasError: true,
+                                    message: "There was an error on the backend retrieving information."
+                                }
+                            }
                         end
+                        # end
                     else
                         random_quote = get_random_quote
                     end
