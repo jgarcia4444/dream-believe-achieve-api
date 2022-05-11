@@ -225,17 +225,12 @@ class QuotesController < ApplicationController
         end
 
         def check_for_day_since_quote(quote_time_string)
-            puts "check for day since quote triggered"
-            puts "#{quote_time_string}"
             todays_time = Time.now
-            puts "Todays Time #{todays_time}"
             quote_time = Time.parse(quote_time_string)
-            puts "Quote Time #{quote_time}"
             quote_date = quote_time.to_date
-            puts "Quote date #{quote_date}"
             todays_date = todays_time.to_date
-            puts "Todays Date #{todays_date}"
             hour_difference = quote_time.hour - todays_time.hour
+            puts "Hour Difference #{hour_difference}"
             if (quote_date.cwday != todays_date.cwday && hour_difference <= 0)
                 return true 
             else
