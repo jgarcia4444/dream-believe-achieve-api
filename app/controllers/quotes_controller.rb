@@ -130,6 +130,7 @@ class QuotesController < ApplicationController
                 if fetching_user
                     random_quote = nil
                     if fetching_user.daily_quote_date
+                        puts "Before checking if has been a day"
                         if !check_for_day_since_quote(fetching_user.daily_quote_date)
                             render :json => {
                                 error: {
@@ -138,6 +139,7 @@ class QuotesController < ApplicationController
                                 }
                             }
                         else
+                            puts "Before getting daily quote ids"
                             daily_quote_ids = fetching_user.daily_quotes.map {|daily_quote| daily_quote.quote_id}
                             if daily_quote_ids
                                 filtered_quotes = Quote.filter_quotes(daily_quote_ids)
