@@ -232,7 +232,9 @@ class QuotesController < ApplicationController
             quote_time = Time.parse(quote_time_string)
             puts "Quote Time #{quote_time}"
             quote_date = quote_time.to_date
+            puts "Quote date #{quote_date}"
             todays_date = todays_time.to_date
+            puts "Todays Date #{todays_date}"
             hour_difference = quote_time.hour - todays_time.hour
             if (quote_date.cwday != todays_date.cwday && hour_difference <= 0)
                 return true 
