@@ -1,3 +1,5 @@
+require 'aws-sdk'
+
 class User < ApplicationRecord
     has_secure_password
 
@@ -43,6 +45,54 @@ class User < ApplicationRecord
                 }
             end
         end
+    end
+
+    def send_verification_code
+        sender = 'dream.believe.achieve.app@google.com'
+        recipient = self.email
+        code = self.ota.code
+        subject = 'Verification Code'
+        html_body = `<h1>Password Change Verification Code</h1>`\
+        `<p>Use the code below to verify your identity and change your password.</p>`\
+        `<h4>#{code}</h4>`
+        text_body = 'Use the information in this email to continue the process of changing your password'
+
+        encoding = 'UTF-8'
+
+        ses = Aws::SES::Client.new(region: 'us-west-1')
+
+        begin 
+            ses.send_email(
+                destination: {
+                    to_address: [
+                        recipient
+                    ]
+                },
+                message: {
+                    body: {
+                        html: {
+                            charset: encoding,
+                            data: html_body
+                        },
+                        text: {
+                            charset: encoding,
+                            data: text_body
+                        }
+                    },
+                    subject: {
+                        charset: encoding,
+                        data: subject
+                    }
+                },
+                source: sender
+            )
+            true
+        rescue
+            Aws::SES:Errors:serviceError => error
+            puts "Email not sent. Error message: #{error}"
+            false
+        end
+
     end
     
 

@@ -1,3 +1,4 @@
+
 class UsersController < ApplicationController
     def create
         puts "User create action triggered!!!!!!!!!!!"
@@ -157,6 +158,7 @@ class UsersController < ApplicationController
                     if new_ota.valid?
                         puts "OTA code valid code:#{ota.code}"
                         # Send code with mailer
+                        
                     else
                         render :json => {
                             error: {
