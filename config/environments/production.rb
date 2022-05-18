@@ -83,4 +83,8 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  Aws::Rails.add_action_mailer_delivery_method(:aws_sdk, region: 'us-west-1')
+  config.action_mailer.delivery_method = :aws_sdk
+
 end
