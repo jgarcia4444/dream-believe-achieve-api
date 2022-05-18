@@ -139,16 +139,32 @@ class UsersController < ApplicationController
             if user
                 code = generate_random_code
                 puts code
-                new_ota = Ota.create(code: code, user_id: user.id)
-                if new_ota.valid?
-                    # Send code with mailer
-                else
-                    render :json => {
-                        error: {
-                            hasError: true,
-                            message: "There was an error creating the code for the user."
+                if user.ota
+                    user.ota.update(code: code)
+                    if user.ota.valid?
+                        puts "OTA code valid code:#{ota.code}"
+                        # Send code with mailer
+                    else
+                        render :json => {
+                            error: {
+                                hasError: true,
+                                message: "There was an error creating the code for the user."
+                            }
                         }
-                    }
+                    end
+                else
+                    new_ota = Ota.create(code: code, user_id: user.id)
+                    if new_ota.valid?
+                        puts "OTA code valid code:#{ota.code}"
+                        # Send code with mailer
+                    else
+                        render :json => {
+                            error: {
+                                hasError: true,
+                                message: "There was an error creating the code for the user."
+                            }
+                        }
+                    end
                 end
             else
                 render :json => {

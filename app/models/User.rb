@@ -4,6 +4,7 @@ class User < ApplicationRecord
     has_one :notification_quote, dependent: :destroy
     has_many :favorites, dependent: :destroy
     has_many :daily_quotes, dependent: :destroy
+    has_one :ota, dependent: :destroy
 
     validates :email, uniqueness: true
     validates :email, presence: true
