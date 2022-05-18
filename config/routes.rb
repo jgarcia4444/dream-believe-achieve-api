@@ -27,4 +27,6 @@ Rails.application.routes.draw do
 
   get "top-ten-quotes", to: "quotes#get_top_ten_quotes"
 
+  post 'users/send-code', to: "users#send_code"
+
 end

@@ -131,5 +131,51 @@ class UsersController < ApplicationController
             }
         end
     end
+
+    def send_code
+        if params[:email]
+            email = params[:email]
+            user = User.find_by(email: email)
+            if user
+                code = generate_random_code
+                puts code
+                new_ota = Ota.create(code: code, user_id: user.id)
+                if new_ota.valid?
+                    # Send code with mailer
+                else
+                    render :json => {
+                        error: {
+                            hasError: true,
+                            message: "There was an error creating the code for the user."
+                        }
+                    }
+                end
+            else
+                render :json => {
+                    error: {
+                        hasError: true,
+                        message: "No user found with the given email."
+                    }
+                }
+            end
+        else
+            render :json => {
+                error: {
+                    hasError: true,
+                    message: "An email must be sent with this request."
+                }
+            }
+        end
+    end
+
+    private
+        def generate_random_code
+            code_string = ""
+            6.times do |i|
+                num = rand(9) + 1
+                code_string += num.to_s
+            end
+            code_string
+        end
     
 end
