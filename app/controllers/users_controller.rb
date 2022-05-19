@@ -189,6 +189,7 @@ class UsersController < ApplicationController
     def change_password
         if params[:password_info]
             password_info = params[:password_info]
+            puts password_info
             if password_info[:email]
                 email = password_info[:email]
                 if password_info[:password]
