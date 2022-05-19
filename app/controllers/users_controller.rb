@@ -186,6 +186,83 @@ class UsersController < ApplicationController
         end
     end
 
+    def change_password
+        if params[:password_info]
+            password_info = params[:password_info]
+            if password_info[:email]
+                email = password_info[:email]
+                if password_info[:password]
+                    password = password_info[:password]
+                    current_user = User.find_by(email: email)
+                    if current_user
+                        if current_user.authenticate(password)
+                            if password_info[:new_password]
+                                new_password = password_info[:new_password]
+                                current_user.update(password: new_password)
+                                if current_user.valid?
+                                    render :json => {
+                                        error: {
+                                            hasError: false
+                                        }
+                                    }
+                                else
+                                    render :json => {
+                                        error: {
+                                            hasError: true,
+                                            message: "An error occured while updating password."
+                                        }
+                                    }
+                                end
+                            else
+                                render :json => {
+                                    error: {
+                                        hasError: true,
+                                        message: "New password must be sent with data."
+                                    }
+                                }
+                            end
+                        else
+                            render :json => {
+                                error: {
+                                    hasError: true,
+                                    message: "Incorrect password."
+                                }
+                            }
+                        end
+                    else
+                        render :json => {
+                            error: {
+                                hasError: true,
+                                message: "No user found with the passed information."
+                            }
+                        }
+                    end
+                else
+                    render :json => {
+                        error: {
+                            hasError: true,
+                            message: "Password on account must be sent with request"
+                        }
+                    }
+                end
+            else
+                render :json => {
+                    error: {
+                        hasError: true,
+                        message: "User must be signed in to continue."
+                    }
+                }                
+            end
+        else
+            render :json => {
+                error: {
+                    hasError: true,
+                    message: "No information sent with request"
+                }
+            }
+        end
+    end
+
     private
         def generate_random_code
             code_string = ""
