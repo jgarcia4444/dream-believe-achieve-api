@@ -51,7 +51,7 @@ class User < ApplicationRecord
         sender = 'dream.believe.achieve.app@google.com'
         recipient = self.email
         code = self.ota.code
-        subject = 'Verification Code
+        subject = 'Verification Code'
         html_body = `<h1>Password Change Verification Code</h1>
         <p>Use the code below to verify your identity and change your password.</p>
         <h4>#{code}</h4>`
