@@ -88,7 +88,7 @@ class User < ApplicationRecord
             )
             true
         rescue
-            Aws::SES:Errors:serviceError => error
+            Aws::SES::Errors::ServiceError => error
             puts "Email not sent. Error message: #{error}"
             false
         end
